@@ -28,7 +28,7 @@ H2 Database implementation : implementation 'com.h2database:h2'
 
 JPA를 위해 엔티티로 변경
 
-*Article.java
+* Article.java
 ~~~java
 @Getter
 @Builder
@@ -50,7 +50,7 @@ public class Article {
 
 도메인에 CRUD하기 위해 관리하는 객체를 Repository라고 한다. Repository는 인터페이스로 생성.
 
-*ArticleRepository.java
+* ArticleRepository.java
 ~~~java
 public interface ArticleRepository extends CrudRepository<Article, Long> {
 }
@@ -60,7 +60,7 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
 
 ArticleService 코드를 ArticleRepository 객체와 연계될 수 있는 코드(JPA)
 
-*ArticleService.java
+* ArticleService.java
 ~~~java
 @RequiredArgsConstructor
 @Service
@@ -96,7 +96,7 @@ JPA는 하나의 Transaction이 끝날 때 마다 갱신하게 된다.
 
 # CRUD API
 
-*ArticleController.java
+* ArticleController.java
 ~~~java
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/article")
@@ -136,7 +136,7 @@ public class ArticleController {
 
 메모라에 저장하는 DB로 테스트를 하거나 예제를 진행하는 프로젝트에서 간단하게 사용할 수 있다.
 
-*application.properties
+* application.properties
 ~~~
 spring.h2.console.enabled=true
 spring.h2.console.path=/h2-console
@@ -153,7 +153,7 @@ Controller에서 했던 일을 Article에서 하게 해준다. - Article 객체 
 
 가독성을 높여줄 수 있고 객체지향스러운 코드 작성 가능.
 
-*Article.java
+* Article.java
 ~~~java
 class Article {
     // ...
@@ -173,7 +173,7 @@ class Article {
   }
 }
 ~~~
-*ArticleDto.java
+* ArticleDto.java
 ~~~java
 //…
 public static Res of(Article from) {
@@ -187,7 +187,7 @@ public static Res of(Article from) {
 } // ArticleController.java에 GET과 PUT에 있던 코드 중복 제거 ( of pattern )
 ~~~
 
-*Response.java
+* Response.java
 ~~~java
 @Getter
 @Builder
@@ -209,7 +209,7 @@ public class Response<T> {
 } // ArticleController.java에 GET과 POST에 있던 코드 중복 제거 ( of pattern )
 ~~~
 
-*ArticleController.java
+* ArticleController.java
 ~~~java
 class ArticleController {
     //...
@@ -244,7 +244,7 @@ class ArticleController {
 
 NullPointerException이 발생하는 것은 너무 위험하기 때문에 적절한 예외처리가 필요하다.
 
-*ArticleService.java
+* ArticleService.java
 ~~~java
 class ArticleService {
     // ...
@@ -264,7 +264,7 @@ class ArticleService {
 실제 API에 대한 내용이 담기는 예외처리가 아님.
 ~~~
 
-*ApiCode.java
+* ApiCode.java
 ~~~java
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
@@ -277,7 +277,7 @@ public enum ApiCode {
 }
 ~~~
 
-*ArticleController.java
+* ArticleController.java
 ~~~java
 class ArticleController {
   //...
@@ -296,7 +296,7 @@ DATA_IS_NOT_FOUND라는 오류만 출력함.
 
 유연성이 부족하다.
 
-*ApiException.java
+* ApiException.java
 ~~~java
 @Getter
 public class ApiException extends RuntimeException {
@@ -313,7 +313,7 @@ public class ApiException extends RuntimeException {
 }
 ~~~
 
-*ArticleService.java
+* ArticleService.java
 ~~~java
 class ArticleService {
     //...
@@ -333,7 +333,7 @@ class ArticleService {
 }
 ~~~
 
-*ArticleController.java
+* ArticleController.java
 ~~~java
 class ArticleController {
   @PutMapping("/{id}")
@@ -353,7 +353,7 @@ API코드에 따라 예외처리를 받을 수 있지만, try-catch문의 중복
 
 ControllerAdvice는 클라이언트의 요청에 따라 컨트롤러가 처리하고 응답이 내려가게 될 때 컨트롤러 다음 단계에서 예외처리를 묶어서 같이 해줄 수 있는 기능을 제공한다.
 
-*ControllerExceptionHandler.java
+* ControllerExceptionHandler.java
 ~~~java
 @RestControllerAdvice
 public class ControllerExceptionHandler {
@@ -366,7 +366,7 @@ public class ControllerExceptionHandler {
 
 @ExceptionHandler - 예외처리에 대한 핸들링을 해달라는 어노테이션.
 
-*ArticleController.java
+* ArticleController.java
 ~~~java
 class ArticleController {
     //...
@@ -384,7 +384,7 @@ class ArticleController {
 
 Assert 객체를 통해 예외처리를 하면 if문을 줄여 가독성을 높일 수 있다.
 
-*Assert.java
+* Assert.java
 ~~~java
 public class Asserts {
     public static void isNull(@Nullable Object obj, ApiCode code, String msg) {
@@ -395,7 +395,7 @@ public class Asserts {
 }
 ~~~
 
-*ArticleService.java
+*A rticleService.java
 ~~~java
 public class ArticleService {
     //...
