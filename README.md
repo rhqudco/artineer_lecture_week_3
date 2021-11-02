@@ -1,34 +1,31 @@
 # artineer_week_lecture_3
 
-# JPA
-JPA는 ORM형태의 기술이다. 기존에는 DB에 대한 의존도가 높기 때문에 DB Query에 의한 시스템을 구축하였다
+## JPA
+- JPA는 ORM형태의 기술이다. 기존에는 DB에 대한 의존도가 높기 때문에 DB Query에 의한 시스템을 구축하였다
 
-자바는 객체지향 언어이기 때문에 DB와 다른 용도로 사용해야 한다.
+- 자바는 객체지향 언어이기 때문에 DB와 다른 용도로 사용해야 한다.
+ - 그래서 ORM이라는 기술이 발전하게 되었다.
 
-그래서 ORM이라는 기술이 발전하게 되었다.
+- ORM(Objective Relation Mapping) : Java의 객체와 DB의 Relation을 Mapping한다 하여 ORM이다. 벤더에 독립적으로 만들 수 있어 DB 프로그램과 분리되어 의존도가 떨어진다.
 
-ORM(Objective Relation Mapping) : Java의 객체와 DB의 Relation을 Mapping한다 하여 ORM이다. 벤더에 독립적으로 만들 수 있어 DB 프로그램과 분리되어 의존도가 떨어진다.
+- JPA implementation : implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-JPA implementation : implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+- H2 Database : 메모라에 저장하는 DB로 테스트를 하거나 예제를 진행하는 프로젝트에서 간단하게 사용할 수 있다.
+ - H2 Database implementation : implementation 'com.h2database:h2'
 
-H2 Database : 메모라에 저장하는 DB로 테스트를 하거나 예제를 진행하는 프로젝트에서 간단하게 사용할 수 있다.
+- @Entity - JPA가 관리하는 Domain이라고 알리기 위한 어노테이션으로 DB에 새로 생긴 객체를 생성이나 제거해준다.
 
-H2 Database implementation : implementation 'com.h2database:h2'
+- @Id - PK로 사용하기 위한 어노테이션
 
-@Entity - JPA가 관리하는 Domain이라고 알리기 위한 어노테이션으로 DB에 새로 생긴 객체를 생성이나 제거해준다.
+- @GeneratedValue - PK를 어떤 전략으로 사용한다 명시하는 어노테이션
 
-@Id - PK로 사용하기 위한 어노테이션
+- @NoArgsConstructor - 생성자의 파라미터가 아무 것도 없는 기본 생성자를 만드는 어노테이션
 
-@GeneratedValue - PK를 어떤 전략으로 사용한다 명시하는 어노테이션
-
-@NoArgsConstructor - 생성자의 파라미터가 아무 것도 없는 기본 생성자를 만드는 어노테이션
-
-@AllArgsConstructor - Builder를 위해 명시한 어노테이션으로 없으면 Builder에 오류가 생긴다.
+- @AllArgsConstructor - Builder를 위해 명시한 어노테이션으로 없으면 Builder에 오류가 생긴다.
 
 
-JPA를 위해 엔티티로 변경
-
-* Article.java
+## JPA를 위해 엔티티로 변경
+### Article.java
 ~~~java
 @Getter
 @Builder
@@ -48,9 +45,9 @@ public class Article {
     }
 ~~~
 
-도메인에 CRUD하기 위해 관리하는 객체를 Repository라고 한다. Repository는 인터페이스로 생성.
+- 도메인에 CRUD하기 위해 관리하는 객체를 Repository라고 한다. Repository는 인터페이스로 생성.
 
-* ArticleRepository.java
+### ArticleRepository.java
 ~~~java
 public interface ArticleRepository extends CrudRepository<Article, Long> {
 }
@@ -58,9 +55,9 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
 // <T(리포지토리가 관리하는 도메인, Id(리포지토리가 관리하는 도메인의 id)>
 ~~~
 
-ArticleService 코드를 ArticleRepository 객체와 연계될 수 있는 코드(JPA)
+- ArticleService 코드를 ArticleRepository 객체와 연계될 수 있는 코드(JPA)
 
-* ArticleService.java
+### ArticleService.java
 ~~~java
 @RequiredArgsConstructor
 @Service
@@ -90,13 +87,13 @@ public class ArticleService {
 }
 ~~~
 
-JPA는 하나의 Transaction이 끝날 때 마다 갱신하게 된다.
+- JPA는 하나의 Transaction이 끝날 때 마다 갱신하게 된다.
 
-@Transactional - 하나의 Transaction을 알리는 어노테이션
+- @Transactional : 하나의 Transaction을 알리는 어노테이션
 
-# CRUD API
+## CRUD API
 
-* ArticleController.java
+### ArticleController.java
 ~~~java
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/article")
@@ -132,28 +129,28 @@ public class ArticleController {
 }
 ~~~
 
-# H2 Database
+## H2 Database
 
-메모라에 저장하는 DB로 테스트를 하거나 예제를 진행하는 프로젝트에서 간단하게 사용할 수 있다.
+- 메모라에 저장하는 DB로 테스트를 하거나 예제를 진행하는 프로젝트에서 간단하게 사용할 수 있다.
 
-* application.properties
+### application.properties
 ~~~
 spring.h2.console.enabled=true
 spring.h2.console.path=/h2-console
 spring.datasource.url=jdbc:h2:mem:testdb
 ~~~
 
-# Of pattern
+## Of pattern
 
-정적 팩토리메소드 패턴이라고도 한다.
+- 정적 팩토리메소드 패턴이라고도 한다.
 
-Controller에서 했던 일을 Article에서 하게 해준다. - Article 객체 생성 코드가 Controller에 있기 때문에 개선이 필요.
+- Controller에서 했던 일을 Article에서 하게 해준다. - Article 객체 생성 코드가 Controller에 있기 때문에 개선이 필요.
 
-비즈니스 로직에 대하여 응집도를 높여준다.
+- 비즈니스 로직에 대하여 응집도를 높여준다.
 
-가독성을 높여줄 수 있고 객체지향스러운 코드 작성 가능.
+- 가독성을 높여줄 수 있고 객체지향스러운 코드 작성 가능.
 
-* Article.java
+### Article.java
 ~~~java
 class Article {
     // ...
@@ -173,7 +170,7 @@ class Article {
   }
 }
 ~~~
-* ArticleDto.java
+### ArticleDto.java
 ~~~java
 //…
 public static Res of(Article from) {
@@ -187,7 +184,7 @@ public static Res of(Article from) {
 } // ArticleController.java에 GET과 PUT에 있던 코드 중복 제거 ( of pattern )
 ~~~
 
-* Response.java
+### Response.java
 ~~~java
 @Getter
 @Builder
@@ -209,7 +206,7 @@ public class Response<T> {
 } // ArticleController.java에 GET과 POST에 있던 코드 중복 제거 ( of pattern )
 ~~~
 
-* ArticleController.java
+### ArticleController.java
 ~~~java
 class ArticleController {
     //...
@@ -236,15 +233,15 @@ class ArticleController {
 }
 // 기존 길고 중복이 많던 코드를 가독성이 좋고 중복을 제거한 코드로 변경
 ~~~
-# 예외처리
+## 예외처리
 
-실무에서는 오류가 발생하면 오류를 나타내면 안된다. 
+- 실무에서는 오류가 발생하면 오류를 나타내면 안된다. 
 
-개발자는 정상 케이스와 비정상 케이스 모두 잡아내어야 한다.
+- 개발자는 정상 케이스와 비정상 케이스 모두 잡아내어야 한다.
 
-NullPointerException이 발생하는 것은 너무 위험하기 때문에 적절한 예외처리가 필요하다.
+- NullPointerException이 발생하는 것은 너무 위험하기 때문에 적절한 예외처리가 필요하다.
 
-* ArticleService.java
+### ArticleService.java
 ~~~java
 class ArticleService {
     // ...
@@ -264,7 +261,7 @@ class ArticleService {
 실제 API에 대한 내용이 담기는 예외처리가 아님.
 ~~~
 
-* ApiCode.java
+### ApiCode.java
 ~~~java
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
@@ -277,7 +274,7 @@ public enum ApiCode {
 }
 ~~~
 
-* ArticleController.java
+### ArticleController.java
 ~~~java
 class ArticleController {
   //...
@@ -292,11 +289,10 @@ class ArticleController {
 } // DATA_IS_NOT_FOUND라는 오류만 출력함.
 ~~~
 
-DATA_IS_NOT_FOUND라는 오류만 출력함. 
+- DATA_IS_NOT_FOUND라는 오류만 출력함. 
+ - 유연성이 부족하다.
 
-유연성이 부족하다.
-
-* ApiException.java
+### ApiException.java
 ~~~java
 @Getter
 public class ApiException extends RuntimeException {
@@ -313,7 +309,7 @@ public class ApiException extends RuntimeException {
 }
 ~~~
 
-* ArticleService.java
+### ArticleService.java
 ~~~java
 class ArticleService {
     //...
@@ -333,7 +329,7 @@ class ArticleService {
 }
 ~~~
 
-* ArticleController.java
+### ArticleController.java
 ~~~java
 class ArticleController {
   @PutMapping("/{id}")
@@ -347,13 +343,13 @@ class ArticleController {
 }
 ~~~
 
-API코드에 따라 예외처리를 받을 수 있지만, try-catch문의 중복코드가 발생하여 가독성이 떨어진다.
+- API코드에 따라 예외처리를 받을 수 있지만, try-catch문의 중복코드가 발생하여 가독성이 떨어진다.
 
-여러가지 문제들 때문에 Spring에서는 ControllerAdvice를 제공한다. 
+- 여러가지 문제들 때문에 Spring에서는 ControllerAdvice를 제공한다. 
 
-ControllerAdvice는 클라이언트의 요청에 따라 컨트롤러가 처리하고 응답이 내려가게 될 때 컨트롤러 다음 단계에서 예외처리를 묶어서 같이 해줄 수 있는 기능을 제공한다.
+- ControllerAdvice는 클라이언트의 요청에 따라 컨트롤러가 처리하고 응답이 내려가게 될 때 컨트롤러 다음 단계에서 예외처리를 묶어서 같이 해줄 수 있는 기능을 제공한다.
 
-* ControllerExceptionHandler.java
+### ControllerExceptionHandler.java
 ~~~java
 @RestControllerAdvice
 public class ControllerExceptionHandler {
@@ -364,9 +360,9 @@ public class ControllerExceptionHandler {
 }
 ~~~
 
-@ExceptionHandler - 예외처리에 대한 핸들링을 해달라는 어노테이션.
+- @ExceptionHandler : 예외처리에 대한 핸들링을 해달라는 어노테이션.
 
-* ArticleController.java
+### ArticleController.java
 ~~~java
 class ArticleController {
     //...
@@ -382,9 +378,9 @@ class ArticleController {
 }
 ~~~
 
-Assert 객체를 통해 예외처리를 하면 if문을 줄여 가독성을 높일 수 있다.
+- Assert 객체를 통해 예외처리를 하면 if문을 줄여 가독성을 높일 수 있다.
 
-* Assert.java
+### Assert.java
 ~~~java
 public class Asserts {
     public static void isNull(@Nullable Object obj, ApiCode code, String msg) {
@@ -395,7 +391,7 @@ public class Asserts {
 }
 ~~~
 
-*A rticleService.java
+### ArticleService.java
 ~~~java
 public class ArticleService {
     //...
@@ -411,12 +407,13 @@ public class ArticleService {
 }
 ~~~
 
-자바 자체에서 제공하는 Optional객체는 정해준 경우에 따라 무조건적인 처리를 진행한다.
+- 자바 자체에서 제공하는 Optional객체는 정해준 경우에 따라 무조건적인 처리를 진행한다.
 
-하지만 비용이 많이 발생하므로 중요한 비즈니스 로직에 사용을 권장한다.
+- 하지만 비용이 많이 발생하므로 중요한 비즈니스 로직에 사용을 권장한다.
 
-조금 더 단순한 형태에서는 Assert사용.
-
+- 조금 더 단순한 형태에서는 Assert사용.
+- 
+### ArticleService.java
 ~~~java
 class ArticleService {
     // ...
